@@ -1,5 +1,5 @@
-const apiKey = "AIzaSyB393-bQ9P6CYoblmAOuzs3kaTyt3Ir9QY"
-const clientId = "722681188597-aucdg9ip8p7d34ag5dee03aurrdvti4q.apps.googleusercontent.com"
+const apiKey = "AIzaSyCDA0p_oTkKvK5qkBcTPzWtf8OPHKziH2A"
+const clientId = "41955844594-8g40vgs4r1j1do8qb91i36sop3f4h575.apps.googleusercontent.com"
 
 const displayUser = document.getElementById('user')
 const displayName = document.getElementById('name')
@@ -10,18 +10,19 @@ let auth
 let user
 
 function initGAuth () {
-  console.log('init')
+    console.log('ok')
   auth = gapi.auth2.getAuthInstance()
-  auth.isSignedIn.listen(sigin)
-  sigin()
+  auth.isSignedIn.listen(loginStatus)
+  loginStatus()
 }
 
-function sigin () {
+function loginStatus () {
   const isSignedIn = auth.isSignedIn.get()
   if (isSignedIn) {
     user = auth.currentUser.get()
     displayUser.style.display = 'block'
-    displayName.textContent = user.getBasicProfile().getName()
+    document.getElementById('name').
+    textContent = user.getBasicProfile().getName()
     btnLogin.style.display = 'none'
     btnLogout.style.display = 'block'
   } else {
@@ -38,7 +39,11 @@ function loginGoogle () {
 }
 
 function logoutGoogle () {
-  auth.signOut();
+  auth.signOut().then(() => {
+    auth.disconnect()
+    auth.isSignedIn.set(null)
+    loginStatus()
+  });
 }
 
 if (typeof gapi === 'object' && gapi.load) {
